@@ -1,5 +1,6 @@
 module top (
     input clk,
+    input sel,
     output LED1,
     output LED2,
     output LED3,
@@ -23,11 +24,26 @@ module top (
         end
     endfunction
     
-    reg [BITS+LOG2DELAY-1:0] counter = 0;
+    
+    reg [31:0] rng = 32'h00010000; // this _should_ seed the rule 30 rng, but it doesn't - it stays all-off until sel is given a negative pulse.
+    
+    initial
+        rng = 32'h00010000; // ... nope, does nothing too. 
+    
+    always@(posedge counter[LOG2DELAY-2])
+    if (sel)
+        rng <= ({rng[0],(rng >> 1)})^(rng | {(rng << 1),rng[31]});
+    else
+        rng <= 32'h00010000; // only this works :(
+
+
+    reg [BITS+LOG2DELAY-1:0] counter = 0; // in the CHECK pass: "Warning: Wire top.counter has an unprocessed 'init' attribute." There's one for rng too.
     
     always@(posedge clk)
         counter <= counter + 1;
         
-    assign {LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8} = bin2gray(counter >> LOG2DELAY-1);
+    assign {LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8} = sel ? rng[14:7] : bin2gray(counter >> LOG2DELAY-1);
+    
+    
     
 endmodule 

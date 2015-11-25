@@ -7,4 +7,6 @@ set_io LED6 C4
 set_io LED7 B3
 set_io LED8 C3
 set_io clk J3
+set_io sel P1
+
 
