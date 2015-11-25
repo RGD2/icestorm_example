@@ -1,4 +1,4 @@
-set_io LED1 B5 
+set_io LED1 B5
 set_io LED2 B4
 set_io LED3 A2
 set_io LED4 A1

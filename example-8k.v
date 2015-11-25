@@ -11,11 +11,11 @@ module top (
 );
 
     localparam BITS = 8;
-    localparam LOG2DELAY = 20;
+    localparam LOG2DELAY = 22;
     
-    function [BITS-1:0] bin2gray(input [BITS-1:0] in);
+    function [BITS-1:0] bin2gray(input [BITS+1:0] in);
         integer i;
-        reg [BITS-1:0] temp;
+        reg [BITS+1:0] temp;
         begin
             temp = in;
             for (i=0; i<BITS; i=i+1)
@@ -28,6 +28,6 @@ module top (
     always@(posedge clk)
         counter <= counter + 1;
         
-    assign {LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8} = bin2gray(counter >> LOG2DELAY);
+    assign {LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8} = bin2gray(counter >> LOG2DELAY-1);
     
 endmodule 
