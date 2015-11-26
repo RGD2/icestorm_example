@@ -11,7 +11,7 @@ example-1k.txt: example-1k.blif
 	arachne-pnr -d 1k -p example-1k.pcf -o example-1k.txt example-1k.blif && rm example-1k.blif
 
 example-1k.blif: example-1k.v
-	yosys -p "read_verilog example-8k.v; synth_ice40 -blif example-8k.blif"
+	yosys -p "read_verilog example-1k.v; synth_ice40 -blif example-1k.blif"
 
 
 8k: upload-8k 
