@@ -21,17 +21,16 @@ module top (
     endfunction
     
     
-    reg [31:0] rng = 32'h00010000; 
-    
-
-    
-    always@(posedge counter[LOG2DELAY-2])
-        rng <= ({rng[0],(rng >> 1)})^(rng | {(rng << 1),rng[31]});
-
     reg [BITS+LOG2DELAY-1:0] counter = 0;
     
     always@(posedge clk)
         counter <= counter + 1;
+        
+        
+    reg [31:0] rng = 32'h00010000; 
+    
+    always@(posedge counter[LOG2DELAY-2])
+        rng <= ({rng[0],(rng >> 1)})^(rng | {(rng << 1),rng[31]});        
         
     assign {LED1, LED2, LED3, LED4, LED5} = rng[11:7];  // = bin2gray(counter >> LOG2DELAY-1);
     

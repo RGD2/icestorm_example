@@ -24,23 +24,17 @@ module top (
         end
     endfunction
     
-    
-    reg [31:0] rng = 32'h00010000; // this _should_ seed the rule 30 rng, but it doesn't - it stays all-off until sel is given a negative pulse.
-    
-    initial
-        rng = 32'h00010000; // ... nope, does nothing too. 
-    
-    always@(posedge counter[LOG2DELAY-2])
-    if (sel)
-        rng <= ({rng[0],(rng >> 1)})^(rng | {(rng << 1),rng[31]});
-    else
-        rng <= 32'h00010000; // only this works :(
 
-
-    reg [BITS+LOG2DELAY-1:0] counter = 0; // in the CHECK pass: "Warning: Wire top.counter has an unprocessed 'init' attribute." There's one for rng too.
+    reg [BITS+LOG2DELAY-1:0] counter = 0; 
     
     always@(posedge clk)
         counter <= counter + 1;
+        
+    
+    reg [31:0] rng = 32'h00010000; 
+    
+    always@(posedge counter[LOG2DELAY-2]) rng <= ({rng[0],(rng >> 1)})^(rng | {(rng << 1),rng[31]});
+        
         
     assign {LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8} = sel ? rng[14:7] : bin2gray(counter >> LOG2DELAY-1);
     
